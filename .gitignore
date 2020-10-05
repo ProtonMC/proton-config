@@ -3,4 +3,5 @@
 .gradle/
 
 ._*
+.DS_Store
 
