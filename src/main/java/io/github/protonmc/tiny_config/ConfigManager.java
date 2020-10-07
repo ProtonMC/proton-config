@@ -14,20 +14,39 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 
+/**
+ * Class used for managing the configuration for a project.
+ * @author dzwdz
+ */
 public class ConfigManager {
     private final Path path;
     public JsonObject config = new JsonObject();
 
+    /**
+     * Constructs a ConfigManager object.
+     * @param path The file where the configuration is stored.
+     */
     public ConfigManager(Path path) {
         this.path = path;
     }
 
 
     // config file handling
+
+    /**
+     * Loads the config into the config field.
+     * @throws IOException See Jankson#load
+     * @throws SyntaxError See Jankson#load
+     */
     public void load() throws IOException, SyntaxError {
         config = Jankson.builder().build().load(Files.newInputStream(path));
     }
 
+    /**
+     * Saves some Objects into the configuration file.
+     * @param objects The objects to save config entries from.
+     * @throws IOException See Writer#write.
+     */
     public void save(Iterable<? extends Saveable> objects) throws IOException {
         for (Saveable o : objects) {
             config.put(o.getSerializedId(), toJson(o));
@@ -37,16 +56,31 @@ public class ConfigManager {
         writer.close();
     }
 
+    /**
+     * Shorthand for loadObject(obj, obj.getSerializedId()).
+     * @param obj The object to load the config into.
+     */
     public void loadObject(Saveable obj) {
         loadObject(obj, obj.getSerializedId());
     }
 
+    /**
+     * Loads a specific part of the config into an object.
+     * @param obj The object to load the config into.
+     * @param id A unique identifier for the object, specifying the JsonObject to load the config from.
+     */
     public void loadObject(Object obj, String id) {
         fromJson(obj, config.getObject(id));
     }
 
 
     // converting objects to JsonObjects and vice versa
+
+    /**
+     * Gets all of the configurable fields inside a class. Used for loading and saving.
+     * @param cl The class to get the fields from.
+     * @return A list of configurable fields.
+     */
     public static List<Field> getConfigurableFields(Class<?> cl) {
         return Arrays.stream(cl.getFields())
                 .filter(f -> !Modifier.isTransient(f.getModifiers()))
@@ -54,6 +88,11 @@ public class ConfigManager {
                 .collect(Collectors.toList());
     }
 
+    /**
+     * Loads a Json object's entries into an object.
+     * @param obj The object to load the entries into.
+     * @param json The JsonObject to load the entries from.
+     */
     public static void fromJson(Object obj, JsonObject json) {
         if (json == null) return;
         for (Field f : getConfigurableFields(obj.getClass())) {
@@ -64,6 +103,11 @@ public class ConfigManager {
         }
     }
 
+    /**
+     * Saves the configurable fields of an Object in a JsobObject.
+     * @param obj The object to save its entries.
+     * @return The JsobObject with the saved entries.
+     */
     public static JsonObject toJson(Object obj) {
         JsonObject json = new JsonObject();
         for (Field f : getConfigurableFields(obj.getClass())) {
