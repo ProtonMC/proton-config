@@ -15,7 +15,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 /**
- * Class used for managing the configuration for a project.
+ * Represents a config file; has static functions handling object serialization.
  * @author dzwdz
  */
 public class ConfigManager {
@@ -30,11 +30,8 @@ public class ConfigManager {
         this.path = path;
     }
 
-
-    // config file handling
-
     /**
-     * Loads the config into the config field.
+     * Reads the config.
      * @throws IOException See Jankson#load
      * @throws SyntaxError See Jankson#load
      */
@@ -42,9 +39,10 @@ public class ConfigManager {
         config = Jankson.builder().build().load(Files.newInputStream(path));
     }
 
+
     /**
-     * Saves some Objects into the configuration file.
-     * @param objects The objects to save config entries from.
+     * Saves the state of some Saveables to disk.
+     * @param objects The Saveables to save.
      * @throws IOException See Writer#write.
      */
     public void save(Iterable<? extends Saveable> objects) throws IOException {
@@ -57,16 +55,16 @@ public class ConfigManager {
     }
 
     /**
-     * Shorthand for loadObject(obj, obj.getSerializedId()).
-     * @param obj The object to load the config into.
+     * Populates the @Configurable fields of a Saveable from the currently loaded config.
+     * @param obj The Saveable to modify.
      */
     public void loadObject(Saveable obj) {
         loadObject(obj, obj.getSerializedId());
     }
 
     /**
-     * Loads a specific part of the config into an object.
-     * @param obj The object to load the config into.
+     * Populates the @Configurable fields of an object from the currently loaded config.
+     * @param obj The object to modify.
      * @param id A unique identifier for the object, specifying the JsonObject to load the config from.
      */
     public void loadObject(Object obj, String id) {
@@ -74,12 +72,10 @@ public class ConfigManager {
     }
 
 
-    // converting objects to JsonObjects and vice versa
-
     /**
-     * Gets all of the configurable fields inside a class. Used for loading and saving.
+     * Gets all of the @Configurable fields inside of a class. Used for loading and saving.
      * @param cl The class to get the fields from.
-     * @return A list of configurable fields.
+     * @return A list of the @Configurable fields.
      */
     public static List<Field> getConfigurableFields(Class<?> cl) {
         return Arrays.stream(cl.getFields())
@@ -89,9 +85,9 @@ public class ConfigManager {
     }
 
     /**
-     * Loads a Json object's entries into an object.
-     * @param obj The object to load the entries into.
-     * @param json The JsonObject to load the entries from.
+     * Populates the @Configurable fields of an object from a JsonObject.
+     * @param obj The object to modify.
+     * @param json The JsonObject to load the fields from.
      */
     public static void fromJson(Object obj, JsonObject json) {
         if (json == null) return;
@@ -104,9 +100,9 @@ public class ConfigManager {
     }
 
     /**
-     * Saves the configurable fields of an Object in a JsobObject.
-     * @param obj The object to save its entries.
-     * @return The JsobObject with the saved entries.
+     * Saves the @Configurable fields of an Object into a JsonObject.
+     * @param obj The object that will have its fields saved.
+     * @return The JsonObject with the fields.
      */
     public static JsonObject toJson(Object obj) {
         JsonObject json = new JsonObject();

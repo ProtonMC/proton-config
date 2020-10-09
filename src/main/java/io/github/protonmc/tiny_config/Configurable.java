@@ -6,7 +6,7 @@ import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
 /**
- * Signifies that a field inside a class can be changed via a configuration file.
+ * Signifies a field that should be mirrored in the config
  * @author dzwdz
  */
 @Retention(RetentionPolicy.RUNTIME)
