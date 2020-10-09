@@ -1,3 +1,4 @@
+![Nexus Repository](https://img.shields.io/nexus/proton/io.github.protonmc/tiny-config?server=https%3A%2F%2Fnexus.dyonb.nl%2F)
 # Tiny Config
 A very basic configuration API that is used by Proton.
 
@@ -13,7 +14,7 @@ repositories {
 // ...
 
 dependencies {
-    implementation("io.github.protonmc:tiny_config:master-SNAPSHOT")
+    implementation("io.github.protonmc:tiny_config:version")
 }
 ```
 
