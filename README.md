@@ -29,13 +29,13 @@ repositories {
 // ...
 
 dependencies {
-    implementation("io.github.protonmc", "tiny_config", "master-SNAPSHOT")
+    implementation("io.github.protonmc", "tiny_config", "version")
 }
 ```
 
 If you're using this for a [Minecraft](https://minecraft.net/) [FabricMC](https://fabricmc.net/) mod you may also want to insert
 ```kotlin
-include("io.github.protonmc:tiny_config:master-SNAPSHOT")
+include("io.github.protonmc:tiny_config:version")
 ```
 in the dependencies block.
 
