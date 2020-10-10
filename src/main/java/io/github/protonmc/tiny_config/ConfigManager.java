@@ -92,6 +92,9 @@ public class ConfigManager {
     public static void fromJson(Object obj, JsonObject json) {
         if (json == null) return;
         for (Field f : getConfigurableFields(obj.getClass())) {
+            if (!json.containsKey(f.getName()))
+                continue;
+
             try {
                 f.set(obj,
                         json.getMarshaller().marshall(f.getType(), json.get(f.getName())));
