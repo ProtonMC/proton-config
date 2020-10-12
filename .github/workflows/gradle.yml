@@ -30,7 +30,9 @@ jobs:
       run: chmod +x gradlew
     - name: Generate Javadoc
       run: ./gradlew javadoc
-    - name: Copy to docs folder
+    - name: Delete existing docs folder
+      run: rm -rf ./docs
+    - name: Move Javadoc to docs folder
       run: mv build/docs/javadoc ./docs
     - name: Commit Javadoc
       uses: EndBug/add-and-commit@v5
