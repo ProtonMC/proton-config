@@ -6,7 +6,7 @@ import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
 /**
- * Signifies a field that should be mirrored in the config
+ * Signifies a field that should be mirrored in the config.
  * @author dzwdz
  */
 @Retention(RetentionPolicy.RUNTIME)
